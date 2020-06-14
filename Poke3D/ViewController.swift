@@ -23,6 +23,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
+        sceneView.autoenablesDefaultLighting = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,8 +60,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             planeNode.eulerAngles.x = -.pi  / 2
             
             node.addChildNode(planeNode)
+            
+            if let pokeScene = SCNScene(named: "art.scnassets/eevee.scn") {
+                if let pokeNode = pokeScene.rootNode.childNodes.first {
+                    // Use real card
+                    let useCard = false
+                    if useCard {
+                        pokeNode.eulerAngles.x = .pi / 2
+                    } else {
+                        screenUse(sceneNode: pokeNode)
+                    }
+                    planeNode.addChildNode(pokeNode)
+                }
+            }
         }
         
         return node
     }
+    
+    func screenUse(sceneNode: SCNNode) {
+        sceneNode.position.y = -0.01
+        sceneNode.position.z = 0.09
+        sceneNode.scale = SCNVector3(0.02, 0.02, 0.02)
+    }
+    
 }
